@@ -18,7 +18,7 @@ import {
   HelpCircle,
 } from 'lucide-react';
 
-// --- 定義資料類型 ---
+// --- 定義資料類型，解決 TypeScript 部署檢查錯誤 ---
 
 interface Verse {
   n: string;
@@ -43,7 +43,8 @@ interface Slide {
   title?: string;
   content?: string;
   badge?: string;
-  icon?: JSX.Element;
+  // 修正：使用 React.ReactNode 替代 JSX.Element 以解決 TS2503 錯誤
+  icon?: React.ReactNode;
   subtitle?: string;
   items?: ReviewItem[];
   footer?: string;
@@ -57,7 +58,7 @@ interface Slide {
   discussion?: string[];
 }
 
-const App = () => {
+const App: React.FC = () => {
   const [currentSlide, setCurrentSlide] = useState<number>(0);
   const [showJumpMenu, setShowJumpMenu] = useState<boolean>(false);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -145,7 +146,7 @@ const App = () => {
       title: '使徒行傳 7 : 26 - 29',
       verses: [
         { n: '26', t: '第二天，有人在打架，摩西就出面調解，說：『你們是弟兄，為甚麼彼此欺負呢？』' },
-        { n: '27', t: '那欺負鄰舍的把他推開，說：『誰立了你作我們的領袖和審判官呢？' },
+        { n: '27', t: '那欺負鄰舍的把他推開，說：『誰立了你作我們的領袖和審判官呢？』' },
         { n: '28', t: '『難道你想殺我，像昨天殺那個埃及人一樣嗎？』' },
         { n: '29', t: '摩西因為這句話，就逃到米甸地寄居，在那裡生了兩個兒子。' },
       ],
@@ -290,7 +291,7 @@ const App = () => {
         { n: '58', t: '眾人將他推出城外，用石頭打他。證人把衣服放在名叫掃羅的青年腳前。' },
         { n: '59', t: '他們打司提反時，他呼求說：「主耶穌啊，求你接收我的靈魂！」' },
         { n: '60', t: '跪下大喊：「主啊，不要將這罪歸給他們！」說了這話，就睡了。' },
-        { n: '▶', t: '理解上是否有問題 ► 回答 第18-21題' },
+        { n: '▶', t: '以上理解是否有問題 ► 回答 第18-21題' },
       ],
     },
     {
@@ -348,6 +349,7 @@ const App = () => {
   const nextSlide = () =>
     setCurrentSlide((prev) => Math.min(prev + 1, slides.length - 1));
   const prevSlide = () => setCurrentSlide((prev) => Math.max(prev - 1, 0));
+  
   const goToSlide = (index: number) => {
     setCurrentSlide(index);
     setShowJumpMenu(false);
@@ -360,14 +362,16 @@ const App = () => {
       if (e.key === 'Escape') setShowJumpMenu(false);
     };
     window.addEventListener('keydown', handleKeyDown);
+    
     const handleClickOutside = (event: MouseEvent) => {
       if (menuRef.current && !menuRef.current.contains(event.target as Node))
         setShowJumpMenu(false);
     };
-    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
+    
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
 
