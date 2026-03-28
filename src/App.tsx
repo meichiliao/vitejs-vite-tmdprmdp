@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import {
   ChevronLeft,
   ChevronRight,
@@ -233,7 +233,7 @@ const App: React.FC = () => {
         { n: '48', t: '其實至高者並不住人手所造的，正如先知說：' },
         { n: '49', t: '『主說：天是我的寶座，地是我的腳凳，你要為我建造怎樣的殿呢？』' },
         { n: '50', t: '『這一切不都是我手所造的嗎？』' },
-        { n: '▶', t: '以上理解是否有問題 ► 回答 第17題' },
+        { n: '▶', t: '理解上是否有問題 ► 回答 第17題' },
       ],
     },
     {
@@ -323,7 +323,7 @@ const App: React.FC = () => {
       scripture: '「神的道傳開了；在耶路撒冷，門徒人數大大增加。」(徒 6:7)',
       content: '當我們按著呼召與聖靈賜予的恩賜侍奉時，教會便得興旺發展。',
       discussion: [
-        '思考你的恩賜是什麼？服事人、教導人、熱心接待或教會管理？',
+        '思考你的恩賜是什麼？服事人、教導人、熱心接待或教會事務管理？',
         '分享使用恩賜服事教會或團契時的感想與收穫。',
       ],
     },
