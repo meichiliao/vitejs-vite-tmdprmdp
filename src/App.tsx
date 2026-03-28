@@ -4,8 +4,6 @@ import {
   ChevronRight,
   Briefcase,
   BookOpen,
-  MessageSquare,
-  Clock,
   Heart,
   Users,
   History,
@@ -20,12 +18,52 @@ import {
   HelpCircle,
 } from 'lucide-react';
 
-const App = () => {
-  const [currentSlide, setCurrentSlide] = useState(0);
-  const [showJumpMenu, setShowJumpMenu] = useState(false);
-  const menuRef = useRef(null);
+// --- 定義資料類型，解決 TypeScript 部署檢查錯誤 ---
 
-  const slides = [
+interface Verse {
+  n: string;
+  t: string;
+}
+
+interface Question {
+  id: number;
+  text: string;
+}
+
+interface ReviewItem {
+  title: string;
+  desc: string;
+  ref: string;
+}
+
+interface Slide {
+  id: number;
+  type: 'title' | 'activity' | 'review_redesign_slim' | 'scripture' | 'handbook_study' | 'summary_final' | 'egg';
+  heading?: string;
+  title?: string;
+  content?: string;
+  badge?: string;
+  // 修正：使用 React.ReactNode 替代 JSX.Element 以解決 TS2503 錯誤
+  icon?: React.ReactNode;
+  subtitle?: string;
+  items?: ReviewItem[];
+  footer?: string;
+  isCenter?: boolean;
+  isBig?: boolean;
+  isLast?: boolean;
+  verses?: Verse[];
+  questions?: Question[];
+  isSingle?: boolean;
+  scripture?: string;
+  discussion?: string[];
+}
+
+const App: React.FC = () => {
+  const [currentSlide, setCurrentSlide] = useState<number>(0);
+  const [showJumpMenu, setShowJumpMenu] = useState<boolean>(false);
+  const menuRef = useRef<HTMLDivElement>(null);
+
+  const slides: Slide[] = [
     {
       id: 1,
       type: 'title',
@@ -77,15 +115,9 @@ const App = () => {
       type: 'scripture',
       title: '使徒行傳 7 : 17 - 19',
       verses: [
-        {
-          n: '17',
-          t: '神給亞伯拉罕的應許快要實現的時候，以色列人在埃及人口繁盛增多；',
-        },
+        { n: '17', t: '神給亞伯拉罕的應許快要實現的時候，以色列人在埃及人口繁盛增多；' },
         { n: '18', t: '但是，到了另一位不認識約瑟的君王興起統治埃及的時候；' },
-        {
-          n: '19',
-          t: '他就謀害我們的同胞，虐待我們的祖先，逼他們拋棄自己的嬰孩，不容嬰孩存活。',
-        },
+        { n: '19', t: '他就謀害我們的同胞，虐待我們的祖先，逼他們拋棄自己的嬰孩，不容嬰孩存活。' },
       ],
     },
     {
@@ -93,10 +125,7 @@ const App = () => {
       type: 'scripture',
       title: '使徒行傳 7 : 20 - 22',
       verses: [
-        {
-          n: '20',
-          t: '就在那時候，摩西出生了，他非常俊美，在父親的家中撫養了三個月。',
-        },
+        { n: '20', t: '就在那時候，摩西出生了，他非常俊美，在父親的家中撫養了三個月。' },
         { n: '21', t: '他被拋棄的時候，法老的女兒把他拾起來，當作兒子撫養。' },
         { n: '22', t: '摩西學盡了埃及人的一切學問，說話行事都有能力。' },
       ],
@@ -106,18 +135,9 @@ const App = () => {
       type: 'scripture',
       title: '使徒行傳 7 : 23 - 25',
       verses: [
-        {
-          n: '23',
-          t: '「到了四十歲，他心中起了一個念頭，要去看望自己的同胞以色列人。',
-        },
-        {
-          n: '24',
-          t: '當他看見有一個人受欺負，就去護衛，為那受屈的抱不平，打死了那個埃及人。',
-        },
-        {
-          n: '25',
-          t: '他以為同胞們都必知道神要藉著他的手拯救他們，事實上他們卻不知道。',
-        },
+        { n: '23', t: '「到了四十歲，他心中起了一個念頭，要去看望自己的同胞以色列人。' },
+        { n: '24', t: '當他看見有一個人受欺負，就去護衛，為那受屈的抱不平，打死了那個埃及人。' },
+        { n: '25', t: '他以為同胞們都必知道神要藉著他的手拯救他們，事實上他們卻不知道。' },
       ],
     },
     {
@@ -125,19 +145,10 @@ const App = () => {
       type: 'scripture',
       title: '使徒行傳 7 : 26 - 29',
       verses: [
-        {
-          n: '26',
-          t: '第二天，有人在打架，摩西就出面調解，說：『你們是弟兄，為甚麼彼此欺負呢？』',
-        },
-        {
-          n: '27',
-          t: '那欺負鄰舍的把他推開，說：『誰立了你作我們的領袖和審判官呢？』',
-        },
+        { n: '26', t: '第二天，有人在打架，摩西就出面調解，說：『你們是弟兄，為甚麼彼此欺負呢？』' },
+        { n: '27', t: '那欺負鄰舍的把他推開，說：『誰立了你作我們的領袖和審判官呢？』' },
         { n: '28', t: '『難道你想殺我，像昨天殺那個埃及人一樣嗎？』' },
-        {
-          n: '29',
-          t: '摩西因為這句話，就逃到米甸地寄居，在那裡生了兩個兒子。',
-        },
+        { n: '29', t: '摩西因為這句話，就逃到米甸地寄居，在那裡生了兩個兒子。' },
       ],
     },
     {
@@ -145,18 +156,9 @@ const App = () => {
       type: 'scripture',
       title: '使徒行傳 7 : 30 - 32',
       verses: [
-        {
-          n: '30',
-          t: '「過了四十年，在西奈山的曠野，有一位使者，在荊棘中的火燄裡，向摩西顯現。',
-        },
-        {
-          n: '31',
-          t: '他見了這個異象，十分驚奇；他正上前察看的時候，就有主的聲音說：',
-        },
-        {
-          n: '32',
-          t: '『我是你祖宗的　神，就是亞伯拉罕、以撒、雅各的　神。』摩西戰戰兢兢，不敢觀看。',
-        },
+        { n: '30', t: '「過了四十年，在西奈山的曠野，有一位使者，在荊棘中的火燄裡，向摩西顯現。' },
+        { n: '31', t: '他見了這個異象，十分驚奇；他正上前察看的時候，就有主的聲音說：' },
+        { n: '32', t: '『我是你祖宗的　神，就是亞伯拉罕、以撒、雅各的　神。』摩西戰戰兢兢，不敢觀看。' },
       ],
     },
     {
@@ -164,14 +166,8 @@ const App = () => {
       type: 'scripture',
       title: '使徒行傳 7 : 33 - 34',
       verses: [
-        {
-          n: '33',
-          t: '主對他說：『把你腳上的鞋脫掉，因為你所站的地方是聖地。',
-        },
-        {
-          n: '34',
-          t: '我的子民在埃及所受的痛苦，我實在看見了；他們的歎息我也聽見了，我下來是要救他們。你來，我要派你到埃及去。』',
-        },
+        { n: '33', t: '主對他說：『把你腳上的鞋脫掉，因為你所站的地方是聖地。' },
+        { n: '34', t: '我的子民在埃及所受的痛苦，我實在看見了；他們的歎息我也聽見了，我下來是要救他們。你來，我要派你到埃及去。』' },
       ],
     },
     {
@@ -179,14 +175,8 @@ const App = () => {
       type: 'scripture',
       title: '使徒行傳 7 : 35 - 36',
       verses: [
-        {
-          n: '35',
-          t: '他們拒絕了這摩西，說：『誰立你作領袖？』但神藉使者的手，派他作領袖。',
-        },
-        {
-          n: '36',
-          t: '這人領他們出來，並且在埃及地、紅海和曠野，行奇事神蹟四十年。',
-        },
+        { n: '35', t: '他們拒絕了這摩西，說：『誰立你作領袖？』但神藉使者的手，派他作領袖。' },
+        { n: '36', t: '這人領他們出來，並且在埃及地、紅海和曠野，行奇事神蹟四十年。' },
       ],
     },
     {
@@ -194,14 +184,8 @@ const App = () => {
       type: 'scripture',
       title: '使徒行傳 7 : 37 - 38',
       verses: [
-        {
-          n: '37',
-          t: '以前摩西對以色列人說：『神要從你們弟兄中間，給你們興起一位先知像我。』',
-        },
-        {
-          n: '38',
-          t: '在曠野大會中，他和在西奈山上對他說話的使者同在，領受活的聖言傳給我們。',
-        },
+        { n: '37', t: '以前摩西對以色列人說：『神要從你們弟兄中間，給你們興起一位先知像我。』' },
+        { n: '38', t: '在曠野大會中，他和在西奈山上對他說話的使者同在，領受活的聖言傳給我們。' },
       ],
     },
     {
@@ -209,18 +193,9 @@ const App = () => {
       type: 'scripture',
       title: '使徒行傳 7 : 39 - 41',
       verses: [
-        {
-          n: '39',
-          t: '我們的祖先不肯聽從他，反而把他推開，他們的心已經轉向了埃及；',
-        },
-        {
-          n: '40',
-          t: '就對亞倫說：『給我們做一些神像。因為那個摩西，我們不知道他遭遇了什麼事。』',
-        },
-        {
-          n: '41',
-          t: '在那些日子裡，他們做了一個牛犢，把祭物獻給那偶像，因自己手所做的而歡樂。',
-        },
+        { n: '39', t: '我們的祖先不肯聽從他，反而把他推開，他們的心已經轉向了埃及；' },
+        { n: '40', t: '就對亞倫說：『給我們做一些神像。因為那個摩西，我們不知道他遭遇了什麼事。』' },
+        { n: '41', t: '在那些日子裡，他們做了一個牛犢，把祭物獻給那偶像，因自己手所做的而歡樂。' },
       ],
     },
     {
@@ -228,14 +203,8 @@ const App = () => {
       type: 'scripture',
       title: '使徒行傳 7 : 42 - 43',
       verses: [
-        {
-          n: '42',
-          t: '於是神轉身離開，任憑他們事奉天象，正如先知書說：『你們豈是將祭物獻給我呢？』',
-        },
-        {
-          n: '43',
-          t: '『你們抬著摩洛的帳幕，和理番神的星。所以我必把你們放逐到巴比倫那一邊去。』',
-        },
+        { n: '42', t: '於是神轉身離開，任憑他們事奉天象，正如先知書說：『你們豈是將祭物獻給我呢？』' },
+        { n: '43', t: '『你們抬著摩洛的帳幕，和理番神的星。所以我必把你們放逐到巴比倫那一邊去。』' },
       ],
     },
     {
@@ -243,14 +212,8 @@ const App = () => {
       type: 'scripture',
       title: '使徒行傳 7 : 44 - 45',
       verses: [
-        {
-          n: '44',
-          t: '「我們的祖先在曠野有作證的帳幕，是跟摩西談話的那位指示他做的。',
-        },
-        {
-          n: '45',
-          t: '神把外族人從他們面前趕走後，他們就同約書亞把帳幕帶進所得地，直到大衛的日子。',
-        },
+        { n: '44', t: '「我們的祖先在曠野有作證的帳幕，是跟摩西談話的那位指示他做的。' },
+        { n: '45', t: '神把外族人從他們面前趕走後，他們就同約書亞把帳幕帶進所得地，直到大衛的日子。' },
       ],
     },
     {
@@ -267,11 +230,8 @@ const App = () => {
       type: 'scripture',
       title: '使徒行傳 7 : 48 - 50',
       verses: [
-        {
-          n: '48',
-          t: '其實至高者並不住人手所造的。主說：『天是我的寶座，地是我的腳凳。』',
-        },
-        { n: '49', t: '『你要為我造怎樣的殿呢？哪裡是我安息的地方呢？』' },
+        { n: '48', t: '其實至高者並不住人手所造的，正如先知說：' },
+        { n: '49', t: '『主說：天是我的寶座，地是我的腳凳，你要為我建造怎樣的殿呢？』' },
         { n: '50', t: '『這一切不都是我手所造的嗎？』' },
         { n: '▶', t: '以上理解是否有問題 ► 回答 第17題' },
       ],
@@ -290,10 +250,7 @@ const App = () => {
       icon: <HelpCircle className="w-12 h-12 text-[#C5A059]" />,
       title: '週四：徒7:17-50——司提反當眾申訴（第二段）',
       questions: [
-        {
-          id: 17,
-          text: '司提反是如何借用這一點來駁斥指控他的人的觀念 —— 即耶路撒冷聖殿是世上最神聖的地方？',
-        },
+        { id: 17, text: '司提反是如何借用這一點來駁斥指控他的人的觀念 —— 即耶路撒冷聖殿是世上最神聖的地方？' },
       ],
       isSingle: true,
     },
@@ -302,8 +259,7 @@ const App = () => {
       type: 'activity',
       icon: <BookOpen className="w-14 h-14 md:w-16 md:h-16 text-[#C5A059]" />,
       title: '閱讀經文 (二)',
-      content:
-        '繼續閱讀 ‧ 一人一句\n司提反對當代猶太人的嚴厲指控\n\n◄ 使徒行傳 7 : 51-60 ►',
+      content: '繼續閱讀 ‧ 一人一句\n司提反對當代猶太人的嚴厲指控\n\n◄ 使徒行傳 7 : 51-60 ►',
       isCenter: true,
     },
     {
@@ -311,14 +267,8 @@ const App = () => {
       type: 'scripture',
       title: '使徒行傳 7 : 51 - 53',
       verses: [
-        {
-          n: '51',
-          t: '「你們這頸項剛硬、心和耳都未受割禮的人，常抗拒聖靈！你們的祖先怎樣，你們也怎樣。',
-        },
-        {
-          n: '52',
-          t: '有哪一個先知你們祖先不迫害呢？你們殺了那些宣告那義者要來的人。',
-        },
+        { n: '51', t: '「你們這頸項剛硬、心和耳都未受割禮的人，常抗拒聖靈！你們的祖先怎樣，你們也怎樣。' },
+        { n: '52', t: '有哪一個先知你們祖先不迫害呢？你們殺了那些宣告那義者要來的人。' },
         { n: '53', t: '你們領受了由天使傳達的律法，卻不遵守。」' },
       ],
     },
@@ -327,10 +277,7 @@ const App = () => {
       type: 'scripture',
       title: '使徒行傳 7 : 54 - 57',
       verses: [
-        {
-          n: '54',
-          t: '眾人聽了這些話，心中非常惱怒，向他咬牙切齒。司提反被聖靈充滿。',
-        },
+        { n: '54', t: '眾人聽了這些話，心中非常惱怒，向他咬牙切齒。司提反被聖靈充滿。' },
         { n: '55', t: '定睛望天，看见 神的榮耀，和耶穌站在 神的右邊。' },
         { n: '56', t: '說：「我看見天開了，人子站在 神的右邊。」' },
         { n: '57', t: '眾人大聲喊叫，掩著耳朵，一齊向他衝過去。' },
@@ -341,18 +288,9 @@ const App = () => {
       type: 'scripture',
       title: '使徒行傳 7 : 58 - 60',
       verses: [
-        {
-          n: '58',
-          t: '眾人將他推出城外，用石頭打他。證人把衣服放在名叫掃羅的青年腳前。',
-        },
-        {
-          n: '59',
-          t: '他們打司提反時，他呼求說：「主耶穌啊，求你接收我的靈魂！」',
-        },
-        {
-          n: '60',
-          t: '跪下大喊：「主啊，不要將這罪歸給他們！」說了這話，就睡了。',
-        },
+        { n: '58', t: '眾人將他推出城外，用石頭打他。證人把衣服放在名叫掃羅的青年腳前。' },
+        { n: '59', t: '他們打司提反時，他呼求說：「主耶穌啊，求你接收我的靈魂！」' },
+        { n: '60', t: '跪下大喊：「主啊，不要將這罪歸給他們！」說了這話，就睡了。' },
         { n: '▶', t: '以上理解是否有問題 ► 回答 第18-21題' },
       ],
     },
@@ -370,16 +308,10 @@ const App = () => {
       icon: <HelpCircle className="w-12 h-12 text-[#C5A059]" />,
       title: '週五：徒 7:51-60 —— 司提反被石頭打死',
       questions: [
-        {
-          id: 18,
-          text: '司提反把指控他的猶太人稱作是「硬著頸項」和「心與耳未受割禮」的人。你認為他這樣說的意思是什麼？你能用日常的通俗語言來表達同一意思嗎？',
-        },
+        { id: 18, text: '司提反把指控他的猶太人稱作是「硬著頸項」和「心與耳未受割禮」的人。你認為他這樣說的意思是什麼？你能用日常的通俗語言來表達同一意思嗎？' },
         { id: 19, text: '司提反是如何指責控告他的猶太人的？' },
         { id: 20, text: '司提反的指控者對他的申訴作出了何種回應？' },
-        {
-          id: 21,
-          text: '司提反離世前的最後一刻表現，向你顯露了他和神之間是怎樣的一種關係？',
-        },
+        { id: 21, text: '司提反離世前的最後一刻表現，向你顯露了他和神之間是怎樣的一種關係？' },
       ],
       isSingle: false,
     },
@@ -391,8 +323,8 @@ const App = () => {
       scripture: '「神的道傳開了；在耶路撒冷，門徒人數大大增加。」(徒 6:7)',
       content: '當我們按著呼召與聖靈賜予的恩賜侍奉時，教會便得興旺發展。',
       discussion: [
-        '思考你的恩賜是什麼？服侍、教導、接待或管理？',
-        '分享使用恩賜服事團契家人時的感想與收穫。',
+        '思考你的恩賜是什麼？服事人、教導人、熱心接待或教會管理？',
+        '分享使用恩賜服事教會或團契時的感想與收穫。',
       ],
     },
     {
@@ -417,26 +349,29 @@ const App = () => {
   const nextSlide = () =>
     setCurrentSlide((prev) => Math.min(prev + 1, slides.length - 1));
   const prevSlide = () => setCurrentSlide((prev) => Math.max(prev - 1, 0));
-  const goToSlide = (index) => {
+  
+  const goToSlide = (index: number) => {
     setCurrentSlide(index);
     setShowJumpMenu(false);
   };
 
   useEffect(() => {
-    const handleKeyDown = (e) => {
+    const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'ArrowRight' || e.key === ' ') nextSlide();
       if (e.key === 'ArrowLeft') prevSlide();
       if (e.key === 'Escape') setShowJumpMenu(false);
     };
     window.addEventListener('keydown', handleKeyDown);
-    const handleClickOutside = (event) => {
-      if (menuRef.current && !menuRef.current.contains(event.target))
+    
+    const handleClickOutside = (event: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node))
         setShowJumpMenu(false);
     };
-    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
+    
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
 
@@ -488,7 +423,7 @@ const App = () => {
                   </p>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 my-2 flex-1 items-center min-h-0">
-                  {slide.items.map((item, i) => (
+                  {slide.items?.map((item, i) => (
                     <div
                       key={i}
                       className="flex flex-col border-l-8 border-[#0C2340] bg-[#FAF9F6] px-6 py-4 shadow-sm rounded-r-lg border-y border-r border-slate-100 h-full justify-center"
@@ -533,7 +468,7 @@ const App = () => {
                       slide.isSingle ? 'grid-cols-1 items-start' : 'grid-cols-2'
                     }`}
                   >
-                    {slide.questions.map((q, idx) => (
+                    {slide.questions?.map((q, idx) => (
                       <div
                         key={idx}
                         className={`flex items-start gap-3 bg-slate-50/50 p-4 md:p-6 rounded-xl border-l-[10px] border-[#C5A059] border-y border-r border-slate-100 shadow-md hover:bg-white transition-all ${
@@ -621,7 +556,7 @@ const App = () => {
                 </div>
 
                 <div className="flex-1 flex flex-col justify-center py-2 min-h-0">
-                  {slide.verses.map((v, idx) => (
+                  {slide.verses?.map((v, idx) => (
                     <div
                       key={idx}
                       className={`flex items-start gap-3 md:gap-5 shrink-0 ${
@@ -680,7 +615,7 @@ const App = () => {
                       <Sun size={18} /> 邀請現場與線上分享恩賜與生命連結
                     </p>
                     <div className="grid grid-cols-1 gap-2">
-                      {slide.discussion.map((item, idx) => (
+                      {slide.discussion?.map((item, idx) => (
                         <div
                           key={idx}
                           className="bg-white p-3 rounded-xl border border-slate-100 flex gap-4 items-center shadow-md"
